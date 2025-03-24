@@ -45,3 +45,16 @@ class DigitClassifier(nn.Module):
             nn.ReLU(),
             nn.Linear(64, 10) # Output 64-> 10 (one per digit)
         )
+    def forward(self, x):
+        x = self.flatten(x)
+        x = self.layers(x)
+        return x
+
+#Instantiate the model
+model  = DigitClassifier()
+
+# Step 4: Define loss function and optimizer
+criterion = nn.CrossEntropyLoss() # For multi-class classification
+optimizer = optim.Adam(model.parameters(), lr=0.001)
+
+# I stooped here
