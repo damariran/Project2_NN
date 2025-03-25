@@ -89,6 +89,9 @@ def predict_custom_image(image_path, model):
     img = img.resize((28, 28), Image.Resampling.LANCZOS) # High-quality resizing
     # Convert to tensor and normalize (Match MNIST Preprocessing)
     img_tensor = transforms.ToTensor()(img) # Shape: [1,28,28], values 0-1
+    # Invert the image (to white image on black background)
+    img_tensor = 1- img_tensor # flip pixel values
+    # normalize to match MNIST
     img_tensor = transforms.Normalize((0.1307,), (0.3081,))(img_tensor)
     # Add batch dimension (the model expects [batch_size, channels, height, width])
     img_tensor = img_tensor.unsqueeze(0) # Shape: [1,1,28,28]
