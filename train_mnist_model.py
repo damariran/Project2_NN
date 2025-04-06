@@ -4,19 +4,15 @@ import torch.optim as optim
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 
-def my_model_parameters():
-    my_input_layer = 28*28
-    my_first_layer = 256
-    my_second_layer = 128
-    my_third_layer = 64
-    my_output_layer = 10
-    return [my_input_layer, my_first_layer, my_second_layer, my_third_layer, my_output_layer]
-
 # Setup parameters
-[input_layer,first_layer, second_layer,
- third_layer, output_layer] = my_model_parameters()
-learning_rate = 0.001
-epochs = 2
+model_factor = 2
+input_layer = 28*28
+first_layer = model_factor*256
+second_layer = model_factor*128
+third_layer = model_factor*64
+output_layer = 10
+learning_rate = 0.0005
+epochs = 10
 
 # Step 1: Load and preprocess MNIST data set
 transform = transforms.Compose([
@@ -78,8 +74,8 @@ with torch.no_grad():
     for images, labels in test_loader:
         outputs = model(images)
         _, predicted = torch.max(outputs.data, 1)
-        total += labels.size()
-        correct += (predicted == labels).sum().item(0)
+        total += labels.size(0)
+        correct += (predicted == labels).sum().item()
 accuracy = 100 * correct / total
 print(f'Test {accuracy: 2f}%')
 
