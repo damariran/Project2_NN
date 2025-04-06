@@ -10,11 +10,12 @@ from torch.utils.data import DataLoader
 from PIL import Image
 
 # model learning parameters
-epochs =10  # The number of training cycles.
-learning_rate = 0.005
+epochs =5  # The number of training cycles.
+learning_rate = 0.01
 number_of_pictures_in_batch =64
 first_layer = 128
 second_layer = 64
+image_path = "C:\Python\Project2_NN\my_pictures\Figure_1.PNG"
 # Step 1: Load and preprocess the MNIST dataset
 transform = transforms.Compose([
     transforms.ToTensor(), # Convert images to pyTorch tensors (0-1 range)
@@ -47,7 +48,7 @@ class DigitClassifier(nn.Module):
         self.flatten = nn.Flatten() # Flatten 28x28 images to 784-element vector
         self.layers = nn.Sequential(
             nn.Linear(28*28, first_layer), # Input: 784 pixels, output: 128 neurons
-            nn.ReLU(), # Introduces the non linearity needed for efficient learning.
+            nn.ReLU(), # Introduces the non-linearity needed for efficient learning.
             nn.Linear(first_layer, second_layer), # Hidden layer: 128 -> 64 neurons
             nn.ReLU(),
             nn.Linear(second_layer, 10) # Output 64-> 10 (one per digit)
@@ -90,8 +91,8 @@ def predict_custom_image(image_path, model):
     # Convert to tensor and normalize (Match MNIST Preprocessing)
     img_tensor = transforms.ToTensor()(img) # Shape: [1,28,28], values 0-1
     # Invert the image (to white image on black background)
-    img_tensor = 1- img_tensor # flip pixel values
-    # normalize to match MNIST
+    # img_tensor = 1- img_tensor # flip pixel values
+    #normalize to match MNIST
     img_tensor = transforms.Normalize((0.1307,), (0.3081,))(img_tensor)
     # Add batch dimension (the model expects [batch_size, channels, height, width])
     img_tensor = img_tensor.unsqueeze(0) # Shape: [1,1,28,28]
@@ -112,7 +113,6 @@ def predict_custom_image(image_path, model):
     return predicted_digit
 
 # Step 7: Test your image
-image_path = "C:\Python\Project2_NN\my_pictures\my_digit_1.jpg"
 predicted_digit = predict_custom_image(image_path, model)
 print(f'The model predicts your image is: {predicted_digit}')
 
